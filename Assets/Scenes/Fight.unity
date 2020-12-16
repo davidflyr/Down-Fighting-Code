@@ -371,6 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  load: {fileID: 1742306650}
 --- !u!95 &113485738
 Animator:
   serializedVersion: 3
@@ -572,7 +573,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.877301
+  orthographic size: 5.0045285
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -596,7 +597,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 259627314}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.47000027, y: 0.8000002, z: -12}
+  m_LocalPosition: {x: -0.47000027, y: 0.8000002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -699,7 +700,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335780606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.47000027, y: 0.8000002, z: -12}
+  m_LocalPosition: {x: -0.47000027, y: 0.8000002, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1337973426}
@@ -19144,6 +19145,7 @@ MonoBehaviour:
   attackPoint: {fileID: 403394988}
   attackRange: 0.52
   hitDamage: 10
+  load: {fileID: 1742306650}
 --- !u!1 &1459653248
 GameObject:
   m_ObjectHideFlags: 0

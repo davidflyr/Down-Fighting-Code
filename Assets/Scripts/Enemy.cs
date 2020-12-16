@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private int maxHealth = 100;
     public int currentHealth;
+
+    public LevelLoader load;
 
 
     // Start is called before the first frame update
@@ -39,11 +42,22 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        StartCoroutine(Death());
+    }
+
+    IEnumerator Death()
+    {
+        Time.timeScale = 0;
         anim.SetBool("dead", true);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<Collider2D>().enabled = false;
         GetComponent<EnemyCombat>().enabled = false;
         enabled = false;
+        yield return new WaitForSecondsRealtime(0.15f);
+
+        Time.timeScale = 0.5f;
+        yield return new WaitForSecondsRealtime(4);
+        load.LoadNextLevel("MainMenu");
     }
 
     /*void FacePlayer() **********

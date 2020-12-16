@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ public class PlayerCombat : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public int hitDamage = 10;
+
+    public LevelLoader load;
 
 
     // Start is called before the first frame update
@@ -69,10 +72,21 @@ public class PlayerCombat : MonoBehaviour
 
     void Die()
     {
+        StartCoroutine(Death());
+    }
+
+    IEnumerator Death()
+    {
+        Time.timeScale = 0f;
         anim.SetBool("dead", true);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<Collider2D>().enabled = false;
         enabled = false;
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        Time.timeScale = 0.5f;
+        yield return new WaitForSecondsRealtime(4);
+        load.LoadNextLevel("MainMenu");
     }
 
     private void OnDrawGizmosSelected()
