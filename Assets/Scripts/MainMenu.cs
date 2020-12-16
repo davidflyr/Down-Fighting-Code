@@ -12,10 +12,4 @@ public class MainMenu : MonoBehaviour
         load = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
         load.LoadNextLevel("Fight");
     }
-
-    public void QuitGame()
-    {
-        Debug.Log("QUIT");
-        Application.Quit();
-    }
 }

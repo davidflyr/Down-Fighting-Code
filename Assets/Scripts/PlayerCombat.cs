@@ -7,6 +7,7 @@ public class PlayerCombat : MonoBehaviour
 {
     private Animator anim;
     public LayerMask enemyLayers;
+    public GameObject _defeat;
 
     [SerializeField] private int maxHealth = 100;
     public int currentHealth;
@@ -55,7 +56,7 @@ public class PlayerCombat : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             enemy.GetComponent<Enemy>().TakeDamage(hitDamage);
-            Debug.Log(enemy.name + "'s current health: " + enemy.GetComponent<Enemy>().currentHealth);
+            Debug.Log(enemy.name + "'s current health: " + enemy.GetComponent<Enemy>()._currentHealth);
         }
     }
 
@@ -84,9 +85,11 @@ public class PlayerCombat : MonoBehaviour
         enabled = false;
         yield return new WaitForSecondsRealtime(0.1f);
 
-        Time.timeScale = 0.45f;
-        yield return new WaitForSecondsRealtime(1);
+        Time.timeScale = 0.33f;
+        yield return new WaitForSecondsRealtime(0.75f);
+
         Time.timeScale = 1;
+        _defeat.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(3);
         load.LoadNextLevel("MainMenu");
     }

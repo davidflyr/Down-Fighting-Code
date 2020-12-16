@@ -5,36 +5,34 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Animator anim;
-    //private GameObject player = GameObject.FindWithTag("Player"); *********
-    //private Rigidbody2D rb;
+    public GameObject _victory;
+    private Animator _anim;
 
-    [SerializeField] private int maxHealth = 100;
-    public int currentHealth;
+    [SerializeField] private int _maxHealth = 100;
+    public int _currentHealth;
 
-    public LevelLoader load;
+    public LevelLoader _load;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
-        //rb = GetComponent<Rigidbody2D>();
-        currentHealth = maxHealth;
+        _anim = GetComponent<Animator>();
+        _currentHealth = _maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //FacePlayer(); *********
+        
     }
 
     public void TakeDamage(int damage)
     {
-        anim.SetTrigger("hurt");
-        currentHealth -= damage;
+        _anim.SetTrigger("hurt");
+        _currentHealth -= damage;
 
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Die();
         }
@@ -48,25 +46,19 @@ public class Enemy : MonoBehaviour
     IEnumerator Death()
     {
         Time.timeScale = 0;
-        anim.SetBool("dead", true);
+        _anim.SetBool("dead", true);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<Collider2D>().enabled = false;
         GetComponent<EnemyCombat>().enabled = false;
         enabled = false;
         yield return new WaitForSecondsRealtime(0.1f);
 
-        Time.timeScale = 0.45f;
-        yield return new WaitForSecondsRealtime(1);
-        Time.timeScale = 1;
-        yield return new WaitForSecondsRealtime(3);
-        load.LoadNextLevel("MainMenu");
-    }
+        Time.timeScale = 0.33f;
+        yield return new WaitForSecondsRealtime(0.75f);
 
-    /*void FacePlayer() **********
-    {
-        if (player.GetComponent<Rigidbody2D>().position.x > rb.position.x) // Player to the right
-            transform.localScale = new Vector2(-1, 1);
-        else
-            transform.localScale = new Vector2(1, 1);
-    }*/
+        Time.timeScale = 1;
+        _victory.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(3);
+        _load.LoadNextLevel("MainMenu");
+    }
 }
