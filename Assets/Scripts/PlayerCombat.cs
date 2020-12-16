@@ -84,8 +84,10 @@ public class PlayerCombat : MonoBehaviour
         enabled = false;
         yield return new WaitForSecondsRealtime(0.1f);
 
-        Time.timeScale = 0.5f;
-        yield return new WaitForSecondsRealtime(4);
+        Time.timeScale = 0.45f;
+        yield return new WaitForSecondsRealtime(1);
+        Time.timeScale = 1;
+        yield return new WaitForSecondsRealtime(3);
         load.LoadNextLevel("MainMenu");
     }
 
