@@ -82,6 +82,7 @@ public class PlayerCombat : MonoBehaviour
         anim.SetBool("dead", true);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<Collider2D>().enabled = false;
+        GetComponent<PlayerController>().enabled = false;
         enabled = false;
         yield return new WaitForSecondsRealtime(0.1f);
 
