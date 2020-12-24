@@ -48,7 +48,7 @@ public class EnemyState : MonoBehaviour
             {
                 CurrentState = State.retreating;
             }
-            else if (distance > _attackingRange)
+            else if (distance > _attackingRange && !_anim.GetCurrentAnimatorStateInfo(0).IsName("HeavyBandit_Attack"))
             {
                 CurrentState = State.advancing;
             }

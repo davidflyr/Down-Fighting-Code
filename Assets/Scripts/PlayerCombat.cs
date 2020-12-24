@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    private Animator anim;
     public LayerMask enemyLayers;
     public GameObject _defeat;
+    public LevelLoader load;
+    public Transform attackPoint;
+
+    private Animator anim;
 
     [SerializeField] private int maxHealth = 100;
     public int currentHealth;
@@ -15,11 +18,11 @@ public class PlayerCombat : MonoBehaviour
     public float attackRemember = 0f;
     public float attackRememberTime = 0.1f;
 
-    public Transform attackPoint;
     public float attackRange = 0.5f;
     public int hitDamage = 10;
 
-    public LevelLoader load;
+    public bool _isDead = false;
+
 
 
     // Start is called before the first frame update
@@ -67,6 +70,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            _isDead = true;
             Die();
         }
     }

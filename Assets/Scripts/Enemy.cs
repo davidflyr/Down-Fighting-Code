@@ -26,7 +26,10 @@ public class Enemy : MonoBehaviour
 
     Vector2 _direction;
     [SerializeField] float _runSpeed = 8f;
+    [SerializeField] float _combatSpeed = 3f;
     float _xVelocity = 0;
+
+    bool _isWinner = false;
 
 
     // Start is called before the first frame update
@@ -49,6 +52,9 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_isWinner)
+            return;
+
         if (_enemyState.CurrentState == EnemyState.State.advancing || _enemyState.CurrentState == EnemyState.State.retreating)
             NonCombatMovement();
         else if (_enemyState.CurrentState == EnemyState.State.attacking)
@@ -77,10 +83,28 @@ public class Enemy : MonoBehaviour
 
     void CombatMovement()
     {
-        if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("HeavyBandit_Hurt") && !_anim.GetCurrentAnimatorStateInfo(0).IsName("HeavyBandit_Attack"))
+        if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("HeavyBandit_Attack") && !_anim.GetCurrentAnimatorStateInfo(0).IsName("HeavyBandit_Hurt"))
         {
-            CheckDirection();
+            if (_target.transform.position.y < (transform.position.y + 1))
+            {
+                if (!_attackTrigger.activeInHierarchy)
+                {
+                    _attackTrigger.SetActive(true);
+                }
+                CheckDirection();
+                _rb.velocity = _direction * _combatSpeed;
+            }
+            else
+            {
+                if (_attackTrigger.activeInHierarchy)
+                {
+                    _attackTrigger.SetActive(false);
+                }
+                _rb.velocity = _direction * _runSpeed;
+            }
         }
+
+
     }
 
     void CheckDirection()
@@ -116,8 +140,8 @@ public class Enemy : MonoBehaviour
     void Attack()
     {
         // Just starts the attack animation, which calls the Damage() function at the strike frame
+        _rb.velocity = Vector2.zero;
         _anim.SetTrigger("attack");
-        //_attackCheck = _attackCheckRecharge;
     }
 
     void Damage()
@@ -127,6 +151,10 @@ public class Enemy : MonoBehaviour
         {
             player.GetComponent<PlayerCombat>().TakeDamage(_hitDamage);
             Debug.Log(player.name + "'s current health: " + player.GetComponent<PlayerCombat>().currentHealth);
+            if (player.GetComponent<PlayerCombat>()._isDead)
+            {
+                _isWinner = true;
+            }
         }
     }
 
