@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public LayerMask _playerLayer;
     public LevelLoader _load;
     public Transform _attackPoint;
+    public CameraShaker _shaker;
 
     Animator _anim;
     EnemyState _enemyState;
@@ -38,6 +39,7 @@ public class Enemy : MonoBehaviour
         _anim = GetComponent<Animator>();
         _enemyState = GetComponent<EnemyState>();
         _rb = GetComponent<Rigidbody2D>();
+        _shaker = GetComponent<CameraShaker>();
 
         _currentHealth = _maxHealth;
         _direction = Vector2.left;
@@ -150,7 +152,7 @@ public class Enemy : MonoBehaviour
         foreach (Collider2D player in hitPlayer)
         {
             player.GetComponent<PlayerCombat>().TakeDamage(_hitDamage);
-            Debug.Log(player.name + "'s current health: " + player.GetComponent<PlayerCombat>().currentHealth);
+            Debug.Log(player.name + "'s current health: " + player.GetComponent<PlayerCombat>()._currentHealth);
             if (player.GetComponent<PlayerCombat>()._isDead)
             {
                 _isWinner = true;
@@ -199,6 +201,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.75f);
 
         Time.timeScale = 1;
+        _shaker.ShakeCamera();
         _victory.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(3);
         _load.LoadNextLevel("MainMenu");

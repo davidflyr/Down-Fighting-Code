@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
             speedmultiplier = (HDirection * speedslope) + speedintercept; //multiplier is positive
             rb.velocity = new Vector2(HDirection * speedmultiplier, rb.velocity.y);
 
-            if (!isAttacking || combat.attackRemember > -0.1f)
+            if (!isAttacking || combat._attackRemember > -0.1f)
                 transform.localScale = new Vector2(-1, 1);
             
             if (!Input.GetButton("Horizontal") && isGrounded)
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
             speedmultiplier = (HDirection * speedslope) - speedintercept; //multiplier is negative
             rb.velocity = new Vector2(HDirection * -speedmultiplier, rb.velocity.y);
 
-            if (!isAttacking || combat.attackRemember > -0.1f)
+            if (!isAttacking || combat._attackRemember > -0.1f)
                 transform.localScale = new Vector2(1, 1);
 
             if (!Input.GetButton("Horizontal") && isGrounded)

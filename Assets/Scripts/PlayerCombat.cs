@@ -5,42 +5,45 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public LayerMask enemyLayers;
+    public LayerMask _enemyLayers;
     public GameObject _defeat;
-    public LevelLoader load;
-    public Transform attackPoint;
+    public LevelLoader _load;
+    public Transform _attackPoint;
+    public CameraShaker _shaker;
 
-    private Animator anim;
+    private Animator _anim;
 
-    [SerializeField] private int maxHealth = 100;
-    public int currentHealth;
+    [SerializeField] private int _maxHealth = 100;
+    public int _currentHealth;
 
-    public float attackRemember = 0f;
-    public float attackRememberTime = 0.1f;
+    public float _attackRemember = 0f;
+    public float _attackRememberTime = 0.1f;
 
-    public float attackRange = 0.5f;
-    public int hitDamage = 10;
+    public float _attackRange = 0.5f;
+    public int _hitDamage = 10;
 
     public bool _isDead = false;
-
+    private float _groundPosition;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
-        currentHealth = maxHealth;
+        _anim = GetComponent<Animator>();
+        _shaker = GetComponent<CameraShaker>();
+        _currentHealth = _maxHealth;
+        _groundPosition = transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        attackRemember -= Time.deltaTime;
+        _attackRemember -= Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.J))
-            attackRemember = attackRememberTime;
+            _attackRemember = _attackRememberTime;
 
-        if (attackRemember > 0 && !anim.GetCurrentAnimatorStateInfo(0).IsName("LightBandit_Attack"))
+        if (_attackRemember > 0 && !_anim.GetCurrentAnimatorStateInfo(0).IsName("LightBandit_Attack"))
         {
             Attack();
         }
@@ -49,26 +52,26 @@ public class PlayerCombat : MonoBehaviour
     void Attack()
     {
         // Just starts the attack animation, which calls the Damage() function at the strike frame
-        anim.SetTrigger("attack");
-        attackRemember = 0f;
+        _anim.SetTrigger("attack");
+        _attackRemember = 0f;
     }
 
     private void Damage()
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange, _enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.GetComponent<Enemy>().TakeDamage(hitDamage);
+            enemy.GetComponent<Enemy>().TakeDamage(_hitDamage);
             Debug.Log(enemy.name + "'s current health: " + enemy.GetComponent<Enemy>()._currentHealth);
         }
     }
 
     public void TakeDamage(int damage)
     {
-        anim.SetTrigger("hurt");
-        currentHealth -= damage;
+        _anim.SetTrigger("hurt");
+        _currentHealth -= damage;
 
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             _isDead = true;
             Die();
@@ -83,7 +86,7 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator Death()
     {
         Time.timeScale = 0f;
-        anim.SetBool("dead", true);
+        _anim.SetBool("dead", true);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<Collider2D>().enabled = false;
         GetComponent<PlayerController>().enabled = false;
@@ -94,13 +97,15 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.75f);
 
         Time.timeScale = 1;
+        transform.position = new Vector3(transform.position.x, _groundPosition, transform.position.z);
+        _shaker.ShakeCamera();
         _defeat.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(3);
-        load.LoadNextLevel("MainMenu");
+        _load.LoadNextLevel("MainMenu");
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(_attackPoint.position, _attackRange);
     }
 }
